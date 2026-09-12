@@ -3,7 +3,8 @@
  * Данные берутся из stations.json (локально или с GitHub Pages)
  */
 
-const DATA_URL = "./stations.json"; // на GitHub Pages будет рядом с index.html
+// const DATA_URL = "./stations.json"; // на GitHub Pages будет рядом с index.html
+const DATA_URL = "https://oompaloomp.github.io/gpn/docs/stations.json";
 // Альтернатива: const DATA_URL = "https://ваш-api.railway.app/api/stations";
 
 let allStations = [];
