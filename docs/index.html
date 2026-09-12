@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPN — Цены на топливо (Пермь)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-icon">⛽</span>
+        <h1>Газпромнефть · Пермь</h1>
+      </div>
+      <p class="subtitle">Актуальные цены и наличие топлива</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <aside class="filters">
+      <h2>Фильтры</h2>
+
+      <div class="filter-group">
+        <label for="search">Поиск по названию</label>
+        <input type="text" id="search" placeholder="Например: Берег Камы" />
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Топливо</span>
+        <div class="checkboxes" id="fuel-filters">
+          <label><input type="checkbox" value="92" checked /> 92</label>
+          <label><input type="checkbox" value="95" checked /> 95</label>
+          <label><input type="checkbox" value="G-92" checked /> G-92</label>
+          <label><input type="checkbox" value="G-95" checked /> G-95</label>
+          <label><input type="checkbox" value="G-100" checked /> G-100</label>
+          <label><input type="checkbox" value="Дизель" checked /> Дизель</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Наличие</span>
+        <div class="radios" id="availability-filters">
+          <label><input type="radio" name="avail" value="all" checked /> Все</label>
+          <label><input type="radio" name="avail" value="yes" /> В наличии</label>
+          <label><input type="radio" name="avail" value="no" /> Нет</label>
+        </div>
+      </div>
+
+      <button id="refresh-btn" class="btn btn-primary">🔄 Обновить данные</button>
+      <p class="updated-at" id="updated-at">—</p>
+    </aside>
+
+    <section class="results">
+      <div class="results-header">
+        <h2>Станции</h2>
+        <span class="count" id="count">Найдено 0 станций</span>
+      </div>
+      <div id="stations-list" class="stations-list">
+        <div class="loading">Загрузка данных…</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Данные с сайта gpnbonus.ru · Обновляется автоматически</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
