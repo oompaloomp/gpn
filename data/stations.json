@@ -1,1 +1,4 @@
-{"updated_at": null, "stations": []}
+Traceback (most recent call last):
+  File "/opt/gpn/src/gpn_parser.py", line 13, in <module>
+    from .config import TARGET_STATIONS, STATION_KEYWORDS
+ImportError: attempted relative import with no known parent package
