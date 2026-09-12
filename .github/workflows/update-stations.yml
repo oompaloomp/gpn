@@ -1,0 +1,45 @@
+name: Update GPN Stations Data
+
+on:
+  schedule:
+    # Каждые 6 часов
+    - cron: "0 */1 * * *"
+  workflow_dispatch: # ручной запуск из GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # curl уже есть в ubuntu-latest
+          # Дополнительные зависимости не нужны для парсера
+
+      - name: Run parser and export JSON
+        run: |
+          mkdir -p data docs
+          python -m src.gpn_parser --export
+          # Копируем свежий JSON в docs/ для GitHub Pages
+          cp data/stations.json docs/stations.json
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/stations.json docs/stations.json
+          git diff --staged --quiet || (
+            git commit -m "chore: update stations data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          )
