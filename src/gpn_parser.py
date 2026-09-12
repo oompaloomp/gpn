@@ -1,7 +1,7 @@
 """
 GPN (Газпромнефть) парсер цен на топливо.
 Возвращает структурированный JSON и умеет экспортировать в файл.
-Восстановлены все заголовки из оригинального GPN_INFO_v3.py.
+Версия B: чистая сессия без хардкод-cookies + усиленный curl для GitHub Actions.
 """
 
 import subprocess
@@ -30,7 +30,12 @@ def update_cookies(response_text: str, current_cookie_str: str) -> tuple[str, Op
                 cookies_dict[k.strip()] = v.strip()
 
     new_str = "; ".join(f"{k}={v}" for k, v in cookies_dict.items())
-    csrf = cookies_dict.get("csrf-token-value") or cookies_dict.get("csrftoken")
+    csrf = (
+        cookies_dict.get("csrf-token-value")
+        or cookies_dict.get("csrftoken")
+        or cookies_dict.get("XSRF-TOKEN")
+        or cookies_dict.get("xsrf-token")
+    )
     return new_str, csrf
 
 
@@ -42,7 +47,15 @@ def run_curl(
     data: str = None,
     include_headers: bool = False,
 ) -> str:
-    cmd = ["curl", "-s", "-X", method, "--max-time", "30"]
+    """Усиленный curl: follow redirects, compression, timeout."""
+    cmd = [
+        "curl", "-s", "-L",
+        "-X", method,
+        "--max-time", "45",
+        "--connect-timeout", "15",
+        "--compressed",
+        "--http1.1",
+    ]
     if include_headers:
         cmd.append("-i")
     if headers:
@@ -54,7 +67,15 @@ def run_curl(
         cmd.extend(["-d", data])
     cmd.append(url)
 
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != 0 and not result.stdout:
+        return f"CURL_ERROR_{result.returncode}: {result.stderr[:300]}"
     return result.stdout
 
 
@@ -114,7 +135,6 @@ def parse_detail_json(json_data: dict) -> Dict[str, dict]:
 
 
 def fetch_all_stations() -> List[Dict[str, Any]]:
-    # === Полный набор заголовков из оригинального GPN_INFO_v3.py ===
     base_headers = {
         "accept": "application/json, text/plain, */*",
         "accept-language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -122,8 +142,8 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
         "origin": "https://gpnbonus.ru",
         "referer": "https://gpnbonus.ru/fuel/refuel-map",
         "sec-ch-ua": '"Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"',
-        "sec-ch-ua-mobile": "?1",
-        "sec-ch-ua-platform": '"Android"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
         "user-agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -132,22 +152,27 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
         "x-requested-with": "XMLHttpRequest",
     }
 
-    # Cookies тоже из оригинала (включая _ym_visorc)
-    cookie_str = (
-        "session-cookie=18d2f250614f4a8e1454922ebeb261f58744f1ed020787fc31c78435dd7e5d2109e9e8910ae3221ab22e8ae0593b4013; "
-        "tmr_lvid=8f1a77329a3579090869626aaf580b3c; tmr_lvidTS=1788758458911; "
-        "_ym_uid=1788758459439363059; _ym_d=1788758459; _ym_isad=2; _ym_visorc=b; mdd=1"
-    )
+    # Чистая сессия — без хардкод cookies
+    cookie_str = ""
 
-    print("1. Получаем токен и cookies...")
+    print("1. Получаем главную страницу и cookies (чистая сессия)...")
     main_out = run_curl(
         "https://gpnbonus.ru/",
         headers=base_headers,
         cookie_str=cookie_str,
         include_headers=True,
     )
+    print(f"   Длина ответа главной: {len(main_out)} символов")
     cookie_str, csrf = update_cookies(main_out, cookie_str)
-    print(f"   CSRF: {csrf[:20] + '...' if csrf and len(csrf) > 20 else csrf}")
+    print(f"   Cookies после главной: {cookie_str[:80]}..." if cookie_str else "   Cookies: пусто")
+    print(f"   CSRF: {csrf}")
+
+    if not csrf and "csrf" in main_out.lower():
+        import re
+        m = re.search(r'csrf[_-]?token["\s:=]+["\']?([a-zA-Z0-9\-_]+)', main_out, re.I)
+        if m:
+            csrf = m.group(1)
+            print(f"   CSRF найден в HTML: {csrf[:30]}...")
 
     print("2. Устанавливаем регион Пермь (ID 2612857)...")
     reg_out = run_curl(
@@ -156,7 +181,11 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
         cookie_str=cookie_str,
         include_headers=True,
     )
-    cookie_str, _ = update_cookies(reg_out, cookie_str)
+    print(f"   Длина ответа региона: {len(reg_out)} символов")
+    cookie_str, csrf2 = update_cookies(reg_out, cookie_str)
+    if csrf2:
+        csrf = csrf2
+    print(f"   CSRF после региона: {csrf}")
 
     print("3. Скачиваем общую базу АЗС...")
     list_headers = base_headers.copy()
@@ -177,26 +206,26 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
         data=payload,
     )
 
-    # --- Отладка ответа ---
-    print("=== RAW RESPONSE (первые 400 символов) ===")
-    print(repr(api_out[:400]) if api_out else "<ПУСТО>")
+    print("=== RAW RESPONSE (первые 500 символов) ===")
+    print(repr(api_out[:500]) if api_out else "<ПУСТО>")
     print("=== END RAW ===")
+    print(f"Длина ответа API: {len(api_out) if api_out else 0}")
 
-    if not api_out or not api_out.strip():
+    if not api_out or not api_out.strip() or api_out.startswith("CURL_ERROR"):
         raise RuntimeError(
-            "Пустой ответ от /api/stations/list. "
-            "Возможно, cookies устарели или сайт блокирует запрос с этого IP."
+            "Пустой или ошибочный ответ от /api/stations/list.\n"
+            f"Ответ: {api_out[:400] if api_out else '<пусто>'}"
         )
 
     try:
         json_start = api_out.find("{")
         if json_start == -1:
-            raise RuntimeError(f"В ответе нет JSON. Ответ: {api_out[:300]}")
+            raise RuntimeError(f"В ответе нет JSON. Ответ: {api_out[:400]}")
         data = json.loads(api_out[json_start:])
     except Exception as e:
         raise RuntimeError(
             f"Не удалось разобрать список станций: {e}\n"
-            f"Ответ сервера (первые 400 символов): {api_out[:400]}"
+            f"Ответ сервера: {api_out[:500]}"
         )
 
     all_stations = data.get("stations", [])
@@ -258,7 +287,6 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
             det_data = json.loads(det_out[det_json_start:])
             fuels = parse_detail_json(det_data)
 
-            # Нормализуем ключи
             normalized = {}
             for key in ["92", "95", "G-92", "G-95", "G-100", "Дизель"]:
                 if key in fuels:
@@ -273,7 +301,7 @@ def fetch_all_stations() -> List[Dict[str, Any]]:
                     }
             station_data["fuels"] = normalized
         except Exception as e:
-            station_data["error"] = f"Ошибка получения данных карточки: {e}"
+            station_data["error"] = f"Ошибка карточки: {e}"
 
         result.append(station_data)
 
@@ -303,16 +331,8 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="GPN fuel price parser")
-    parser.add_argument(
-        "--export",
-        action="store_true",
-        help="Экспорт в data/stations.json",
-    )
-    parser.add_argument(
-        "--pretty",
-        action="store_true",
-        help="Красивый вывод JSON",
-    )
+    parser.add_argument("--export", action="store_true", help="Экспорт в data/stations.json")
+    parser.add_argument("--pretty", action="store_true", help="Красивый вывод JSON")
     args = parser.parse_args()
 
     if args.export:
