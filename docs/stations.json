@@ -1,21 +1,22 @@
 {
-  "updated_at": "2026-09-14T07:00:10.285273+03:00",
+  "updated_at": "2026-09-14T07:36:18.833003+03:00",
   "stations": [
     {
       "id": "501",
       "name": "Пермь Газпромнефть (Космонавтов, 59/2) АЗС N 501",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": true,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
-          "status": "нет",
-          "has_truck": false
+          "status": "ожидается доставка",
+          "has_truck": true
         },
         "G-92": {
           "price": null,
@@ -35,7 +36,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -43,7 +45,7 @@
       "id": "502",
       "name": "Пермь Газпромнефть (Цимлянская, 40) АЗС N 502",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -73,7 +75,8 @@
         "Дизель": {
           "price": 81.24,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -81,7 +84,7 @@
       "id": "503",
       "name": "Пермь Газпромнефть (Коммунистическая, 27а) АЗС N 503",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -111,7 +114,8 @@
         "Дизель": {
           "price": 81.24,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -119,12 +123,13 @@
       "id": "504",
       "name": "Пермь Газпромнефть (Новогайвинская, 108) АЗС N 504",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
@@ -149,7 +154,8 @@
         "Дизель": {
           "price": 81.24,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -157,17 +163,19 @@
       "id": "506",
       "name": "Пермь Газпромнефть (Пермь-Екатеринбург, 13 км) АЗС N 506",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": true
+          "has_truck": true,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
           "status": "в наличии",
-          "has_truck": true
+          "has_truck": true,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-92": {
           "price": null,
@@ -177,7 +185,8 @@
         "G-95": {
           "price": 71.54,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-100": {
           "price": null,
@@ -187,7 +196,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": true
+          "has_truck": true,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -195,12 +205,13 @@
       "id": "508",
       "name": "Пермь Газпромнефть (Берег Камы) АЗС N 508",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": true
+          "has_truck": true,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 69.97,
@@ -225,7 +236,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -233,17 +245,19 @@
       "id": "509",
       "name": "Пермь Газпромнефть (40-летия Победы, 22) АЗС N 509",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-92": {
           "price": null,
@@ -253,7 +267,8 @@
         "G-95": {
           "price": 71.54,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-100": {
           "price": null,
@@ -263,7 +278,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -271,17 +287,19 @@
       "id": "510",
       "name": "Пермь Газпромнефть (Ижевская, 3) АЗС N 510",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-92": {
           "price": null,
@@ -301,7 +319,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -309,7 +328,7 @@
       "id": "511",
       "name": "Пермь Газпромнефть (Калинина, 75) АЗС N 511",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -339,7 +358,8 @@
         "Дизель": {
           "price": 81.24,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -347,7 +367,7 @@
       "id": "512",
       "name": "Пермь Газпромнефть (Космонавта Леонова, 80) АЗС N 512",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -357,7 +377,8 @@
         "95": {
           "price": 70.04,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "G-92": {
           "price": null,
@@ -377,7 +398,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -385,7 +407,7 @@
       "id": "513",
       "name": "Пермь Газпромнефть (Усть-Сыны) АЗС N 513",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -423,12 +445,13 @@
       "id": "514",
       "name": "Пермь Газпромнефть (Сибирская, 72) АЗС N 514",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         },
         "95": {
           "price": 70.04,
@@ -453,7 +476,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -461,7 +485,7 @@
       "id": "539",
       "name": "Пермь Газпромнефть (Космонавтов, 325) АЗС N 539",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": null,
@@ -499,7 +523,7 @@
       "id": "550",
       "name": "Пермь Газпромнефть (Космонавтов, 310/11) АЗС N 550",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -529,7 +553,8 @@
         "Дизель": {
           "price": 81.24,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     },
@@ -537,7 +562,7 @@
       "id": "551",
       "name": "Пермь Газпромнефть (Куйбышева, 113б) АЗС N 551",
       "address": "",
-      "time": "07:00",
+      "time": "07:36",
       "fuels": {
         "92": {
           "price": 65.01,
@@ -567,7 +592,8 @@
         "Дизель": {
           "price": 81.36,
           "status": "в наличии",
-          "has_truck": false
+          "has_truck": false,
+          "available_since": "2026-09-14T07:36:18.833003+03:00"
         }
       }
     }
