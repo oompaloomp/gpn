@@ -266,3 +266,10 @@ main.container {
   font-size: 0.85rem;
   color: var(--gpn-muted);
 }
+
+.station-duration {
+  font-size: 0.8rem;
+  color: var(--success);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
