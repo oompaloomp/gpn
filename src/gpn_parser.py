@@ -316,10 +316,53 @@ def get_stations_json() -> dict:
     }
 
 
+def _load_previous(path: Path) -> dict:
+    """Читает предыдущий stations.json для расчёта available_since."""
+    if not path.exists():
+        return {}
+    try:
+        prev = json.loads(path.read_text(encoding="utf-8"))
+        by_id = {}
+        for st in prev.get("stations", []):
+            by_id[str(st.get("id"))] = st.get("fuels") or {}
+        return by_id
+    except Exception:
+        return {}
+
+
+def _apply_available_since(stations: list, previous: dict, now_iso: str) -> list:
+    """
+    Для топлива со статусом «в наличии»:
+    - если раньше его не было / не было в наличии → available_since = now
+    - если уже было в наличии → сохраняем старый available_since
+    - если сейчас нет → поле убираем
+    """
+    for st in stations:
+        sid = str(st.get("id"))
+        prev_fuels = previous.get(sid) or {}
+        fuels = st.get("fuels") or {}
+        for name, f in fuels.items():
+            if f.get("status") == "в наличии":
+                prev_f = prev_fuels.get(name) or {}
+                if prev_f.get("status") == "в наличии" and prev_f.get("available_since"):
+                    f["available_since"] = prev_f["available_since"]
+                else:
+                    f["available_since"] = now_iso
+            else:
+                f.pop("available_since", None)
+        st["fuels"] = fuels
+    return stations
+
+
 def export_to_json(path: str | Path = "data/stations.json") -> Path:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+
+    previous = _load_previous(path)
     data = get_stations_json()
+    now_iso = data["updated_at"]
+    data["stations"] = _apply_available_since(data["stations"], previous, now_iso)
+
     path.write_text(
         json.dumps(data, ensure_ascii=False, indent=2),
         encoding="utf-8",
