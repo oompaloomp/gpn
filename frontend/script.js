@@ -3,7 +3,9 @@
  * Время всегда в МСК, для топлива «в наличии» показывается длительность.
  */
 
-const DATA_URL = "./stations.json";
+// const DATA_URL = "./stations.json"; // на GitHub Pages будет рядом с index.html
+const DATA_URL = "https://oompaloomp.github.io/gpn/stations.json";
+// Альтернатива: const DATA_URL = "https://ваш-api.railway.app/api/stations";
 
 let allStations = [];
 let lastUpdated = null;
